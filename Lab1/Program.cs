@@ -5,33 +5,50 @@ namespace Lab1
 {
     public class Logic
     {
-
-        public static string Compare(int numb)
+        public static string ConvertToRublesAndKopecks(int number)
         {
-            string outMessage = "";
-            int s = 0;
-            int f = 0;
-            if ((1 <= numb) & (numb <= 9999))
+            if (number < 1 || number > 9999)
             {
-                s = numb / 100;
-                f = numb % 100;
-                outMessage = $"{s} rubles {f} kopecks";
+                return "Некорректное значение. Введите число от 1 до 9999";
             }
+
+            int rubles = number / 100;
+            int kopecks = number % 100;
+
+            string rubleWord;
+            if (rubles % 10 == 1 && rubles % 100 != 11)
+                rubleWord = "рубль";
+            else if (rubles % 10 >= 2 && rubles % 10 <= 4 && (rubles % 100 < 10 || rubles % 100 >= 20))
+                rubleWord = "рубля";
             else
-            {
-                outMessage = "Error";
-            }
-            return outMessage;
+                rubleWord = "рублей";
+
+            string kopeckWord;
+            if (kopecks % 10 == 1 && kopecks % 100 != 11)
+                kopeckWord = "копейка";
+            else if (kopecks % 10 >= 2 && kopecks % 10 <= 4 && (kopecks % 100 < 10 || kopecks % 100 >= 20))
+                kopeckWord = "копейки";
+            else
+                kopeckWord = "копеек";
+
+            return $"{rubles} {rubleWord} {kopecks} {kopeckWord}";
         }
     }
+
     internal class Program
     {
         static void Main(string[] args)
         {
-            string name = Console.ReadLine();
-            int numb = int.Parse(name);
-            var outMessage = Logic.Compare(numb);
-            Console.WriteLine(outMessage);
+            string input = Console.ReadLine();
+
+            if (!int.TryParse(input, out int number))
+            {
+                Console.WriteLine("Ошибка: введите число");
+                return;
+            }
+
+            string result = Logic.ConvertToRublesAndKopecks(number);
+            Console.WriteLine(result);
         }
     }
 }
